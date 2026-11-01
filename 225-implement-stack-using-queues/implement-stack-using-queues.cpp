@@ -1,35 +1,64 @@
 class MyStack {
     queue<int> q;
-     int length ;
+     int length = 0;
 public:
     MyStack() {
-        length = 0;
     }
-    
-    void push(int x) {
-        int n = q.size();
-        q.push(x);
-        length++;
 
-        for(int i=0;i<n;i++){ // Rotate Queue
+    // Method 1
+        void push(int x) { // TC = O(1)
+            q.push(x);
+            length++;
+        }
+        int pop() { // TC = O(N)
+            int n = q.size();
+            for(int i=0;i<n-1;i++){
+                q.push(q.front());
+                q.pop();
+            }
+            int val = q.front();
+            q.pop();
+            length--;
+            return val;
+        }
+        int top() {  // TC = O(N)
+            if (q.empty())  return -1;
+
+            int n = q.size();
+            for(int i=0;i<n-1;i++){
+                q.push(q.front());
+                q.pop();
+            }
+            int val = q.front();
             q.push(q.front());
             q.pop();
+            return val;
         }
-    }
-    
-    int pop() {
-        int val = q.front();
-        q.pop();
-        length--;
-        return val;
-    }
-    
-    int top() {
-        if (!q.empty()) 
-            return q.front();
-        return -1;
-    }
-    
+
+    // Method 2
+        // void push(int x) { // TC = O(N)
+        //     int n = q.size();
+        //     q.push(x);
+        //     length++;
+
+        //     for(int i=0;i<n;i++){ // Rotate Queue
+        //         q.push(q.front());
+        //         q.pop();
+        //     }
+        // }
+        
+        // int pop() { // TC = O(1)
+        //     int val = q.front();
+        //     q.pop();
+        //     length--;
+        //     return val;
+        // }
+        
+        // int top() {  // TC = O(1)
+        //     if (!q.empty()) 
+        //         return q.front();
+        //     return -1;
+        // }
     bool empty() {
         if(length == 0) return true;
         else return false;
