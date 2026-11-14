@@ -1,42 +1,39 @@
 class Solution {
 public:
-    bool isValid(vector<int> &arr, int k,int n, long long mid){
-        int student = 1 ;
-        long long pages = 0;
-        for(int i=0;i<n;i++){
-            if(arr[i] > mid) return false;
-            if(pages + arr[i] <= mid){
-                pages += arr[i];
+    bool isPossible(vector<int>& arr, int& k , long long& mid){
+        int painter = 1;
+        long long time = 0;
+        for(int i=0;i<arr.size();i++){
+            if(arr[i] + time <= mid){
+                time += arr[i];
             }else{
-                student++;
-                pages = arr[i];
+                painter++;
+                time = arr[i];
             }
         }
-        if(student > k) return false;
+        if(painter > k) return false;
         else return true;
     }
-
+    
     int splitArray(vector<int>& arr, int k) {
-         int n = arr.size();
-        
-        if(k>n) return -1;
-        
-       long long sum = 0;
+        int n = arr.size();
+        long long sum = 0;
+        long long max = 0;
         for(int i=0;i<n;i++){
+            if(arr[i] > max ) max = arr[i];
             sum += arr[i];
         }
-        
         long long ans = -1;
-        long long start = 0 , end = sum;
+        long long start = max , end = sum;
         while(start <= end){
-            long mid = start + (end - start)/2;
-            if(isValid(arr , k, n, mid)){
+            long long mid = start + (end - start)/2;
+            if(isPossible(arr,k,mid)){
                 ans = mid;
-               end = mid - 1;
+                end = mid - 1;
             }else{
                 start = mid + 1;
             }
         }
-        return (int)ans;
+        return ans;
     }
 };
