@@ -1,27 +1,56 @@
 class Solution {
 public:
-        // Method-2
-    class Triplet{
-        public:
-        long long mx;
-        long long mn;
-        bool isBST;
-    };
-
-    Triplet valid(TreeNode* root){
-        if(root == NULL) return {LLONG_MIN , LLONG_MAX , true};
-        long long val = root->val;
-        Triplet left = valid(root->left);
-        Triplet right = valid(root->right);
-        long long mx = max(val,max(left.mx , right.mx));
-        long long mn = min(val,min(left.mn,right.mn));
-        bool isBST(val > left.mx && val < right.mn && left.isBST && right.isBST);
-        return {mx,mn,isBST};
-    }
-
     bool isValidBST(TreeNode* root) {
-        return valid(root).isBST;
+        TreeNode* curr = root;
+        TreeNode* prev = NULL;
+        bool bst = true;
+        while(curr){
+            if(curr->left){
+                TreeNode* pred = curr->left;
+                while(pred->right && pred->right != curr){
+                    pred = pred->right;
+                }
+                if(pred->right == NULL){
+                    pred->right = curr;
+                    curr = curr->left;
+                }else{
+                    pred->right = NULL;
+                    if(prev != NULL && prev->val >= curr->val) bst = false;
+                    prev = curr;
+                    curr = curr->right;
+                }
+            }else{
+                if(prev != NULL && prev->val >= curr->val) bst = false;
+                prev = curr;
+                curr = curr->right;
+            }
+        }
+        return bst;
     }
+
+
+        // Method-2
+    // class Triplet{
+    //     public:
+    //     long long max;
+    //     long long min;
+    //     bool isBST;
+    // };
+
+    // Triplet valid(TreeNode* root){
+    //     if(root == NULL) return {LLONG_MIN , LLONG_MAX , true};
+    //     long long val = root->val;
+    //     Triplet left = valid(root->left);
+    //     Triplet right = valid(root->right);
+    //     long long mx = max(val,max(left.max , right.max));
+    //     long long mn = min(val,min(left.min,right.min));
+    //     bool isBST(val > left.max && val < right.min && left.isBST && right.isBST);
+    //     return {mx,mn,isBST};
+    // }
+
+    // bool isValidBST(TreeNode* root) {
+    //     return valid(root).isBST;
+    // }
 
 
         // Method-1
